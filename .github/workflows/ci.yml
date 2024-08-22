@@ -59,8 +59,9 @@ jobs:
           mkdir test-project
           cd test-project
           npm init -y
+          npm install electron@latest
           npm install ../
-          npx electron-rebuild
+          npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2)
 
   publish:
     needs: [test-electron-rebuild]
