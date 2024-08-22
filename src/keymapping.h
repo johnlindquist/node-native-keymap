@@ -16,6 +16,9 @@
 #include <pthread.h>
 #endif
 
+#include <cstdint>
+#include <string_view>
+
 namespace vscode_keyboard {
 
 // This structure is used to define the keycode mapping table.
@@ -34,7 +37,7 @@ typedef struct {
 
   // The UIEvents (aka: DOM4Events) |code| value as defined in:
   // http://www.w3.org/TR/DOM-Level-3-Events-code/
-  const char* code;
+  std::string_view code;
 } KeycodeMapEntry;
 
 typedef struct {
@@ -54,8 +57,8 @@ void DisposeKeyboardLayoutChangeListenerImpl(NotificationCallbackData *data);
 napi_value IsISOKeyboardImpl(napi_env env, napi_callback_info info);
 
 void InvokeNotificationCallback(NotificationCallbackData *data);
-napi_status napi_set_named_property_string_utf8(napi_env env, napi_value object, const char *utf8_name, const char *value);
-napi_status napi_set_named_property_int32(napi_env env, napi_value object, const char *utf8_name, int value);
+napi_status napi_set_named_property_string_utf8(napi_env env, napi_value object, std::string_view utf8_name, std::string_view value);
+napi_status napi_set_named_property_int32(napi_env env, napi_value object, std::string_view utf8_name, int value);
 napi_value napi_fetch_null(napi_env env);
 napi_value napi_fetch_undefined(napi_env env);
 napi_value napi_fetch_boolean(napi_env env, bool value);

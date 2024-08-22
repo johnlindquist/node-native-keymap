@@ -6,23 +6,24 @@
 #define NODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT
 #include <node.h>
 #include <map>
+#include <string_view>
 
 #include "keymapping.h"
 #include "common.h"
 
 namespace vscode_keyboard {
 
-napi_status napi_set_named_property_string_utf8(napi_env env, napi_value object, const char *utf8_name, const char *value) {
+napi_status napi_set_named_property_string_utf8(napi_env env, napi_value object, std::string_view utf8_name, std::string_view value) {
   napi_value _value;
-  NAPI_CALL_RETURN_STATUS(env, napi_create_string_utf8(env, value, NAPI_AUTO_LENGTH, &_value));
-  NAPI_CALL_RETURN_STATUS(env, napi_set_named_property(env, object, utf8_name, _value));
+  NAPI_CALL_RETURN_STATUS(env, napi_create_string_utf8(env, value.data(), value.length(), &_value));
+  NAPI_CALL_RETURN_STATUS(env, napi_set_named_property(env, object, utf8_name.data(), _value));
   return napi_ok;
 }
 
-napi_status napi_set_named_property_int32(napi_env env, napi_value object, const char *utf8_name, int value) {
+napi_status napi_set_named_property_int32(napi_env env, napi_value object, std::string_view utf8_name, int value) {
   napi_value _value;
   NAPI_CALL_RETURN_STATUS(env, napi_create_int32(env, value, &_value));
-  NAPI_CALL_RETURN_STATUS(env, napi_set_named_property(env, object, utf8_name, _value));
+  NAPI_CALL_RETURN_STATUS(env, napi_set_named_property(env, object, utf8_name.data(), _value));
   return napi_ok;
 }
 
@@ -62,7 +63,7 @@ static void NotifyJS(napi_env env, napi_value func, void* context, void* data) {
     NAPI_CALL_RETURN_VOID(env, napi_get_global(env, &global));
 
     std::vector<napi_value> argv;
-    NAPI_CALL_RETURN_VOID(env, napi_call_function(env, global, func, argv.size(), argv.data(), NULL));
+    NAPI_CALL_RETURN_VOID(env, napi_call_function(env, global, func, argv.size(), argv.data(), nullptr));
   }
 }
 
@@ -115,8 +116,8 @@ void DeleteInstanceData(napi_env env, void *raw_data, void *hint) {
 }
 
 napi_value Init(napi_env env, napi_value exports) {
-  NotificationCallbackData *data = new NotificationCallbackData();
-  NAPI_CALL(env, napi_set_instance_data(env, data, DeleteInstanceData, NULL));
+  auto data = std::make_unique<NotificationCallbackData>();
+  NAPI_CALL(env, napi_set_instance_data(env, data.release(), DeleteInstanceData, nullptr));
 
   {
     napi_value get_key_map_fn;
