@@ -32,6 +32,8 @@
       },
       "conditions": [
         ['OS=="linux"', {
+          "cflags": ["-std=c++20"],
+          "cflags_cc": ["-std=c++20"],
           "sources": [
             "deps/chromium/x/keysym_to_unicode.cc",
             "src/keyboard_x.cc"
