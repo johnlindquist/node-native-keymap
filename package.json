@@ -1,20 +1,26 @@
 {
-  "name": "native-keymap",
-  "version": "3.3.5",
-  "description": "Get OS key mapping",
-  "main": "index.js",
-  "typings": "index.d.ts",
-  "scripts": {
-    "test": "node test/test.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Microsoft/node-native-keymap.git"
-  },
-  "author": "Microsoft Corporation",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Microsoft/node-native-keymap/issues"
-  },
-  "homepage": "https://github.com/Microsoft/node-native-keymap#readme"
+	"name": "@johnlindquist/native-keymap",
+	"version": "3.3.6",
+	"description": "Get OS key mapping",
+	"main": "index.js",
+	"typings": "index.d.ts",
+	"scripts": {
+		"test": "node test/test.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/johnlindquist/node-native-keymap.git"
+	},
+	"author": "John Lincwist",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/johnlindquist/node-native-keymap/issues"
+	},
+	"homepage": "https://github.com/johnlindquist/node-native-keymap#readme",
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"standard-version": "^9.5.0"
+	}
 }
