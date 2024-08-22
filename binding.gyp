@@ -6,34 +6,39 @@
         "src/string_conversion.cc",
         "src/keymapping.cc"
       ],
-      'msvs_configuration_attributes': {
-        'SpectreMitigation': 'Spectre'
+      "cflags!": ["-fno-exceptions"],
+      "cflags_cc!": ["-fno-exceptions"],
+      "cflags": ["-std=c++20", "-Wall", "-Wextra", "-Werror"],
+      "cflags_cc": ["-std=c++20", "-Wall", "-Wextra", "-Werror"],
+      "xcode_settings": {
+        "OTHER_CPLUSPLUSFLAGS": ["-std=c++20", "-Wall", "-Wextra", "-Werror"],
+        "GCC_ENABLE_CPP_EXCEPTIONS": "YES"
       },
-      'msvs_settings': {
-        'VCCLCompilerTool': {
-          'AdditionalOptions': [
-            '/guard:cf',
-            '/w34244',
-            '/we4267',
-            '/ZH:SHA_256',
-            '/std:c++20'
+      "msvs_settings": {
+        "VCCLCompilerTool": {
+          "ExceptionHandling": 1,
+          "AdditionalOptions": [
+            "/std:c++20",
+            "/W4",
+            "/WX",
+            "/guard:cf",
+            "/w34244",
+            "/we4267",
+            "/ZH:SHA_256"
           ]
         },
-        'VCLinkerTool': {
-          'AdditionalOptions': [
-            '/guard:cf'
+        "VCLinkerTool": {
+          "AdditionalOptions": [
+            "/guard:cf"
           ]
         }
       },
-      "cflags": ["-std=c++20"],
-      "cflags_cc": ["-std=c++20"],
-      "xcode_settings": {
-        "OTHER_CPLUSPLUSFLAGS": ["-std=c++20"]
+      "msvs_configuration_attributes": {
+        "SpectreMitigation": "Spectre"
       },
+      "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"],
       "conditions": [
-        ['OS=="linux"', {
-          "cflags": ["-std=c++20"],
-          "cflags_cc": ["-std=c++20"],
+        ["OS=='linux'", {
           "sources": [
             "deps/chromium/x/keysym_to_unicode.cc",
             "src/keyboard_x.cc"
@@ -45,7 +50,7 @@
             "<!@(${PKG_CONFIG:-pkg-config} x11 xkbfile --libs)"
           ]
         }],
-        ['OS=="freebsd"', {
+        ["OS=='freebsd'", {
           "sources": [
             "deps/chromium/x/keysym_to_unicode.cc",
             "src/keyboard_x.cc"
@@ -61,22 +66,22 @@
             ]
           }
         }],
-        ['OS=="win"', {
+        ["OS=='win'", {
           "sources": [
             "src/keyboard_win.cc"
           ]
         }],
-        ['OS=="mac"', {
+        ["OS=='mac'", {
           "sources": [
             "src/keyboard_mac.mm"
           ],
-          'link_settings' : {
-            'libraries' : [
-              '-framework Cocoa'
+          "link_settings": {
+            "libraries": [
+              "-framework Cocoa"
             ]
           }
         }],
-        ['OS=="aix"', {
+        ["OS=='aix'", {
           "sources": [
             "deps/chromium/x/keysym_to_unicode.cc",
             "src/keyboard_x.cc"
