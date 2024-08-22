@@ -80,6 +80,8 @@ jobs:
         env:
           CXXFLAGS: "-std=c++20"
           CFLAGS: "-std=c++20"
+          DEBUG: electron-rebuild,node-gyp
+          ELECTRON_REBUILD_VERBOSE: 1
       - name: Print compiler flags
         run: |
           cd test-project
@@ -109,7 +111,3 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-env:
-  DEBUG: electron-rebuild,node-gyp
-  ELECTRON_REBUILD_VERBOSE: 1
