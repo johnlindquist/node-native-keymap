@@ -33,7 +33,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 20.16.0
-      - run: python3 -m pip install setuptools
+      - name: Set up Python virtual environment
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+      - name: Install setuptools
+        run: pip install setuptools
       - run: npm ci
       - run: npm test
 
