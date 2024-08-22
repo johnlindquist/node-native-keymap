@@ -76,9 +76,10 @@ jobs:
       - name: Run Electron Rebuild
         run: |
           cd test-project
-          export CXXFLAGS="-std=c++20"
-          export CFLAGS="-std=c++20"
-          npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2) --cxxflags="-std=c++20"
+          npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2)
+        env:
+          CXXFLAGS: "-std=c++20"
+          CFLAGS: "-std=c++20"
       - name: Print compiler flags
         run: |
           cd test-project
@@ -110,4 +111,5 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 env:
-  ACTIONS_STEP_DEBUG: true
+  DEBUG: electron-rebuild,node-gyp
+  ELECTRON_REBUILD_VERBOSE: 1
