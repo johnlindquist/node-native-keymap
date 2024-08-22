@@ -16,7 +16,7 @@
             '/w34244',
             '/we4267',
             '/ZH:SHA_256',
-            '/std:c++20'  // Add C++20 support for MSVC
+            '/std:c++20'
           ]
         },
         'VCLinkerTool': {
@@ -25,10 +25,10 @@
           ]
         }
       },
-      "cflags": ["-std=c++20"],  // Add C++20 support for GCC/Clang
-      "cflags_cc": ["-std=c++20"],  // Add C++20 support for GCC/Clang (C++ specific)
+      "cflags": ["-std=c++20"],
+      "cflags_cc": ["-std=c++20"],
       "xcode_settings": {
-        "OTHER_CPLUSPLUSFLAGS": ["-std=c++20"]  // Add C++20 support for Xcode
+        "OTHER_CPLUSPLUSFLAGS": ["-std=c++20"]
       },
       "conditions": [
         ['OS=="linux"', {
