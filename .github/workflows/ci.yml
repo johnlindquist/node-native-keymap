@@ -46,7 +46,8 @@ jobs:
     name: Test Electron Rebuild
     runs-on: ubuntu-latest
     env:
-      DEBUG: electron-rebuild
+      DEBUG: electron-rebuild,node-gyp
+      ELECTRON_REBUILD_VERBOSE: 1
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -55,10 +56,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install gcc-10 g++-10 -y
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10 --slave /usr/bin/gcov gcov /usr/bin/gcov-10
+          sudo apt install gcc-11 g++-11 -y
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
           npm ci
           npm install -g electron-rebuild
+      - name: Check node-gyp version
+        run: npx node-gyp --version
       - name: Test build with Electron Rebuild
         run: |
           mkdir test-project
@@ -66,7 +69,14 @@ jobs:
           npm init -y
           npm install electron@latest
           npm install ../
-          npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2)
+      - name: Test build with Electron Rebuild
+        run: |
+          cd test-project
+          npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2) --cxxflags="-std=c++20"
+      - name: Print compiler flags
+        run: |
+          cd test-project
+          npx node-gyp configure --verbose
 
   publish:
     needs: [test-electron-rebuild]

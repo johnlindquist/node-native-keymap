@@ -6,38 +6,43 @@
         "src/string_conversion.cc",
         "src/keymapping.cc"
       ],
-      "include_dirs": [
-        "<!@(node -p \"require('node-addon-api').include\")"
-      ],
-      "dependencies": [
-        "<!(node -p \"require('node-addon-api').gyp\")"
-      ],
-      "cflags!": ["-fno-exceptions"],
-      "cflags_cc!": ["-fno-exceptions"],
+      'msvs_configuration_attributes': {
+        'SpectreMitigation': 'Spectre'
+      },
+      'msvs_settings': {
+        'VCCLCompilerTool': {
+          'AdditionalOptions': [
+            '/guard:cf',
+            '/w34244',
+            '/we4267',
+            '/ZH:SHA_256',
+            '/std:c++20'
+          ]
+        },
+        'VCLinkerTool': {
+          'AdditionalOptions': [
+            '/guard:cf'
+          ]
+        }
+      },
+      "cflags": ["-std=c++20"],
       "cflags_cc": ["-std=c++20"],
       "xcode_settings": {
-        "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
-        "CLANG_CXX_LIBRARY": "libc++",
-        "MACOSX_DEPLOYMENT_TARGET": "10.15",
         "OTHER_CPLUSPLUSFLAGS": ["-std=c++20"]
-      },
-      "msvs_settings": {
-        "VCCLCompilerTool": {
-          "ExceptionHandling": 1,
-          "AdditionalOptions": ["/std:c++20"]
-        }
       },
       "conditions": [
         ['OS=="linux"', {
+          "cflags": ["-std=c++20"],
+          "cflags_cc": ["-std=c++20"],
           "sources": [
             "deps/chromium/x/keysym_to_unicode.cc",
             "src/keyboard_x.cc"
           ],
           "include_dirs": [
-            "<!@(pkg-config x11 xkbfile --cflags-only-I | sed s/-I//g)"
+            "<!@(${PKG_CONFIG:-pkg-config} x11 xkbfile --cflags | sed s/-I//g)"
           ],
           "libraries": [
-            "<!@(pkg-config x11 xkbfile --libs)"
+            "<!@(${PKG_CONFIG:-pkg-config} x11 xkbfile --libs)"
           ]
         }],
         ['OS=="freebsd"', {
