@@ -37,7 +37,7 @@ typedef struct {
 
   // The UIEvents (aka: DOM4Events) |code| value as defined in:
   // http://www.w3.org/TR/DOM-Level-3-Events-code/
-  std::string_view code;
+  const char* code;
 } KeycodeMapEntry;
 
 typedef struct {

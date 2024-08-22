@@ -184,7 +184,7 @@ napi_value GetKeyMapImpl(napi_env env, napi_callback_info info) {
   size_t cnt = sizeof(usb_keycode_map) / sizeof(usb_keycode_map[0]);
 
   for (size_t i = 0; i < cnt; ++i) {
-    const char *code = usb_keycode_map[i].code;
+    const char *code = usb_keycode_map[i].code ? usb_keycode_map[i].code : "";
     int native_keycode = usb_keycode_map[i].native_keycode;
 
     if (!code || native_keycode <= 0) {
