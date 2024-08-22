@@ -45,6 +45,8 @@ jobs:
   test-electron-rebuild:
     name: Test Electron Rebuild
     runs-on: ubuntu-latest
+    env:
+      DEBUG: electron-rebuild
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
