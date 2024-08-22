@@ -60,18 +60,24 @@ jobs:
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
           npm ci
           npm install -g electron-rebuild
+      - name: Check compiler versions
+        run: |
+          gcc --version
+          g++ --version
       - name: Check node-gyp version
         run: npx node-gyp --version
-      - name: Test build with Electron Rebuild
+      - name: Create test project
         run: |
           mkdir test-project
           cd test-project
           npm init -y
           npm install electron@latest
           npm install ../
-      - name: Test build with Electron Rebuild
+      - name: Run Electron Rebuild
         run: |
           cd test-project
+          export CXXFLAGS="-std=c++20"
+          export CFLAGS="-std=c++20"
           npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2) --cxxflags="-std=c++20"
       - name: Print compiler flags
         run: |
