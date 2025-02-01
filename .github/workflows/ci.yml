@@ -80,6 +80,7 @@ jobs:
           pnpm init
           pnpm add electron@32.0.0
           cp ../binding.gyp .
+          cp -r ../src .
           pnpm add ../
       - name: Run Electron Rebuild
         run: |
