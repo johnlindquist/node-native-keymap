@@ -53,30 +53,33 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.16.0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install gcc-11 g++-11 -y
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
-          npm ci
-          npm install -g electron-rebuild
+          pnpm install
+          pnpm add -g @electron/rebuild
       - name: Check compiler versions
         run: |
           gcc --version
           g++ --version
       - name: Check node-gyp version
-        run: npx node-gyp --version
+        run: pnpm exec node-gyp --version
       - name: Create test project
         run: |
           mkdir test-project
           cd test-project
-          npm init -y
-          npm install electron@latest
-          npm install ../
+          pnpm init
+          pnpm add electron@latest
+          pnpm add ../
       - name: Run Electron Rebuild
         run: |
           cd test-project
-          npx electron-rebuild --version=$(npm list electron --depth=0 | grep electron | cut -d@ -f2)
+          pnpm exec electron-rebuild --version=$(pnpm list electron --depth=0 | grep electron | cut -d@ -f2)
         env:
           CXXFLAGS: "-std=c++20"
           CFLAGS: "-std=c++20"
@@ -85,7 +88,7 @@ jobs:
       - name: Print compiler flags
         run: |
           cd test-project
-          npx node-gyp configure --verbose
+          pnpm exec node-gyp configure --verbose
 
   publish:
     needs: [test-electron-rebuild]
@@ -98,16 +101,19 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 20.16.0
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Git config
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-      - run: npm ci
+      - run: pnpm install
       - name: Bump version
-        run: npx standard-version
+        run: pnpm exec standard-version
       - name: Push changes
         run: git push --follow-tags origin main
-      - run: npm publish
+      - run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
