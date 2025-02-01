@@ -61,6 +61,7 @@ jobs:
           sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev -y
           pnpm install
           pnpm add -g @electron/rebuild
+          pnpm add -g node-gyp
           # Add retries for header downloads
           export npm_config_fetch_retries=5
           export npm_config_fetch_retry_mintimeout=20000
@@ -71,7 +72,7 @@ jobs:
           gcc --version
           g++ --version
       - name: Check node-gyp version
-        run: pnpm exec node-gyp --version
+        run: node-gyp --version
       - name: Create test project
         run: |
           mkdir test-project
