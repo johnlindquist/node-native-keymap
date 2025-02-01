@@ -79,6 +79,7 @@ jobs:
           cd test-project
           pnpm init
           pnpm add electron@32.0.0
+          cp ../binding.gyp .
           pnpm add ../
       - name: Run Electron Rebuild
         run: |
