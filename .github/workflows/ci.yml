@@ -58,7 +58,8 @@ jobs:
           version: 8
       - name: Install dependencies
         run: |
-          sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev -y
+          sudo apt update
+          sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev pkg-config -y
           pnpm install
           pnpm add -g @electron/rebuild
           pnpm add -g node-gyp
@@ -98,6 +99,7 @@ jobs:
           pnpm exec node-gyp configure --verbose
 
   publish:
+    needs: [test-electron-rebuild]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
