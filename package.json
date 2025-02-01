@@ -23,8 +23,11 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"standard-version": "^9.5.0",
 		"@electron/rebuild": "^3.6.0",
-		"electron": "^32.0.0"
+		"electron": "^32.0.0",
+		"standard-version": "^9.5.0"
+	},
+	"dependencies": {
+		"node-gyp": "^11.0.0"
 	}
 }

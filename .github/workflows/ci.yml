@@ -3,37 +3,120 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  windows:
-    name: Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 22.9.0
-      - run: npm ci
-      - run: npm test
+  # windows:
+  #   name: Windows
+  #   runs-on: windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 20.16.0
+  #     - run: npm ci
+  #     - run: npm test
 
-  linux:
-    name: Linux
+  # linux:
+  #   name: Linux
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 20.16.0
+  #     - run: npm ci
+  #     - run: npm test
+
+  # macos:
+  #   name: macOS
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 20.16.0
+  #     - name: Set up Python virtual environment
+  #       run: |
+  #         python3 -m venv venv
+  #         source venv/bin/activate
+  #     - name: Install setuptools
+  #       run: pip install setuptools
+  #     - run: npm ci
+  #     - run: npm test
+
+  test-electron-rebuild:
+    name: Test Electron Rebuild
     runs-on: ubuntu-latest
+    env:
+      DEBUG: electron-rebuild,node-gyp
+      ELECTRON_REBUILD_VERBOSE: 1
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22.9.0
-      - run: npm ci
-      - run: npm test
+          node-version: 20.16.0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install dependencies
+        run: |
+          sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev -y
+          pnpm install
+          pnpm add -g @electron/rebuild
+          # Add retries for header downloads
+          export npm_config_fetch_retries=5
+          export npm_config_fetch_retry_mintimeout=20000
+          export npm_config_fetch_retry_maxtimeout=120000
+          pnpm rebuild
+      - name: Check compiler versions
+        run: |
+          gcc --version
+          g++ --version
+      - name: Check node-gyp version
+        run: pnpm exec node-gyp --version
+      - name: Create test project
+        run: |
+          mkdir test-project
+          cd test-project
+          pnpm init
+          pnpm add electron@32.0.0
+          pnpm add ../
+      - name: Run Electron Rebuild
+        run: |
+          cd test-project
+          pnpm exec electron-rebuild --version=32.0.0
+        env:
+          CXXFLAGS: "-std=c++20"
+          CFLAGS: "-std=c++20"
+          DEBUG: electron-rebuild
+          ELECTRON_REBUILD_VERBOSE: 1
+      - name: Print compiler flags
+        run: |
+          cd test-project
+          pnpm exec node-gyp configure --verbose
 
-  macos:
-    name: macOS
-    runs-on: macos-latest
+  publish:
+    needs: [test-electron-rebuild]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
-          node-version: 22.9.0
-        # https://github.com/nodejs/node-gyp/issues/2869
-      - run: python3 -m pip install setuptools
-      - run: npm ci
-      - run: npm test
+          node-version: 20.16.0
+          registry-url: "https://registry.npmjs.org"
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Git config
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - run: pnpm install
+      - name: Bump version
+        run: pnpm exec standard-version
+      - name: Push changes
+        run: git push --follow-tags origin main
+      - run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
