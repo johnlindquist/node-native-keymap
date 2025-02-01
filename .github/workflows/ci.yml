@@ -58,11 +58,16 @@ jobs:
           version: 8
       - name: Install dependencies
         run: |
-          sudo apt update
           sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev -y
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
           pnpm install
           pnpm add -g @electron/rebuild
+          # Use a more stable version of Electron
+          pnpm add electron@28.1.0 --save-dev
+          # Add retries for header downloads
+          export npm_config_fetch_retries=5
+          export npm_config_fetch_retry_mintimeout=20000
+          export npm_config_fetch_retry_maxtimeout=120000
+          pnpm rebuild
       - name: Check compiler versions
         run: |
           gcc --version
