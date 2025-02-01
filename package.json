@@ -4,6 +4,14 @@
 	"description": "Get OS key mapping",
 	"main": "index.js",
 	"typings": "index.d.ts",
+	"files": [
+		"index.js",
+		"index.d.ts",
+		"build",
+		"src",
+		"binding.gyp",
+		"scripts"
+	],
 	"scripts": {
 		"test": "node test/test.js",
 		"rebuild": "node scripts/rebuild.js",
