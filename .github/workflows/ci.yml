@@ -61,8 +61,6 @@ jobs:
           sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev -y
           pnpm install
           pnpm add -g @electron/rebuild
-          # Use a more stable version of Electron
-          pnpm add electron@28.1.0 --save-dev
           # Add retries for header downloads
           export npm_config_fetch_retries=5
           export npm_config_fetch_retry_mintimeout=20000
@@ -79,12 +77,12 @@ jobs:
           mkdir test-project
           cd test-project
           pnpm init
-          pnpm add electron@latest
+          pnpm add electron@32.0.0
           pnpm add ../
       - name: Run Electron Rebuild
         run: |
           cd test-project
-          pnpm exec electron-rebuild --version=$(pnpm list electron --depth=0 | grep electron | cut -d@ -f2)
+          pnpm exec electron-rebuild --version=32.0.0
         env:
           CXXFLAGS: "-std=c++20"
           CFLAGS: "-std=c++20"
