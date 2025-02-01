@@ -98,7 +98,6 @@ jobs:
           pnpm exec node-gyp configure --verbose
 
   publish:
-    needs: [test-electron-rebuild]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
