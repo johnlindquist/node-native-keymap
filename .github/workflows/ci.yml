@@ -113,6 +113,10 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install gcc-11 g++-11 libx11-dev libxkbfile-dev pkg-config -y
       - name: Git config
         run: |
           git config user.name github-actions
