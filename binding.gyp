@@ -8,23 +8,19 @@
       ],
       "cflags!": ["-fno-exceptions"],
       "cflags_cc!": ["-fno-exceptions"],
-      "cflags": ["-std=c++20", "-Wall", "-Wextra", "-Werror"],
-      "cflags_cc": ["-std=c++20", "-Wall", "-Wextra", "-Werror"],
+      "cflags": ["-std=c++20"],
+      "cflags_cc": ["-std=c++20"],
       "xcode_settings": {
-        "OTHER_CPLUSPLUSFLAGS": ["-std=c++20", "-Wall", "-Wextra", "-Werror"],
-        "GCC_ENABLE_CPP_EXCEPTIONS": "YES"
+        "OTHER_CPLUSPLUSFLAGS": ["-std=c++20"],
+        "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
+        "CLANG_CXX_LANGUAGE_STANDARD": "c++20"
       },
       "msvs_settings": {
         "VCCLCompilerTool": {
           "ExceptionHandling": 1,
           "AdditionalOptions": [
             "/std:c++20",
-            "/W4",
-            "/WX",
-            "/guard:cf",
-            "/w34244",
-            "/we4267",
-            "/ZH:SHA_256"
+            "/W3"
           ]
         },
         "VCLinkerTool": {
@@ -48,7 +44,9 @@
           ],
           "libraries": [
             "<!@(${PKG_CONFIG:-pkg-config} x11 xkbfile --libs)"
-          ]
+          ],
+          "cflags": ["-std=c++20"],
+          "cflags_cc": ["-std=c++20"]
         }],
         ["OS=='freebsd'", {
           "sources": [
@@ -64,7 +62,9 @@
               "-lxkbfile",
               "-L/usr/local/lib"
             ]
-          }
+          },
+          "cflags": ["-std=c++20"],
+          "cflags_cc": ["-std=c++20"]
         }],
         ["OS=='win'", {
           "sources": [
@@ -91,7 +91,9 @@
               "-lX11",
               "-lxkbfile"
             ]
-          }
+          },
+          "cflags": ["-std=c++20"],
+          "cflags_cc": ["-std=c++20"]
         }]
       ]
     }

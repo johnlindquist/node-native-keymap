@@ -5,13 +5,15 @@
 	"main": "index.js",
 	"typings": "index.d.ts",
 	"scripts": {
-		"test": "node test/test.js"
+		"test": "node test/test.js",
+		"rebuild": "node scripts/rebuild.js",
+		"install": "node scripts/rebuild.js"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/johnlindquist/node-native-keymap.git"
 	},
-	"author": "John Lincwist",
+	"author": "John Lindquist",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/johnlindquist/node-native-keymap/issues"
@@ -21,6 +23,8 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"standard-version": "^9.5.0"
+		"standard-version": "^9.5.0",
+		"@electron/rebuild": "^3.6.0",
+		"electron": "^32.0.0"
 	}
 }
