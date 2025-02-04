@@ -14,8 +14,7 @@
 	],
 	"scripts": {
 		"test": "node test/test.js",
-		"rebuild": "node scripts/rebuild.js",
-		"install": "node scripts/rebuild.js"
+		"build": "pnpm exec electron-rebuild -f -w @johnlindquist/native-keymap -v 32.0.0"
 	},
 	"repository": {
 		"type": "git",
@@ -31,11 +30,7 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"@electron/rebuild": "^3.6.0",
-		"electron": "^32.0.0",
+		"@electron/rebuild": "^3.7.1",
 		"standard-version": "^9.5.0"
-	},
-	"dependencies": {
-		"node-gyp": "^11.0.0"
 	}
 }
