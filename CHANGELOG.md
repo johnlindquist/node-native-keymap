@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.3.10](https://github.com/johnlindquist/node-native-keymap/compare/v3.3.9...v3.3.10) (2025-02-04)
+
+
+### Bug Fixes
+
+* **build:** fixing install build ([9116337](https://github.com/johnlindquist/node-native-keymap/commit/911633773bf6ad3654c026325fd49c06b94bcf5e))
+
 ### [3.3.9](https://github.com/johnlindquist/node-native-keymap/compare/v3.3.8...v3.3.9) (2025-02-01)
 
 ### [3.3.8](https://github.com/johnlindquist/node-native-keymap/compare/v3.3.7...v3.3.8) (2025-02-01)
