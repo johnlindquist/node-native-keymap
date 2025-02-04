@@ -14,7 +14,8 @@
 	],
 	"scripts": {
 		"test": "node test/test.js",
-		"build": "pnpm exec electron-rebuild -f -w @johnlindquist/native-keymap -v 32.0.0"
+		"build": "pnpm exec electron-rebuild -f -w @johnlindquist/native-keymap",
+		"install": "pnpm exec electron-rebuild -f -w @johnlindquist/native-keymap"
 	},
 	"repository": {
 		"type": "git",
